@@ -1,5 +1,9 @@
-import { Links, LiveReload, Meta, Outlet, Scripts } from "@remix-run/react";
-
+import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration } from "@remix-run/react";
+import type { LinksFunction } from "@remix-run/node";
+import appStylesHref from "./app.css";
+export const links: LinksFunction = () => [
+  { rel: "stylesheet", href: appStylesHref}
+]
 export default function App() {
   return (
     <html lang="en">
@@ -12,7 +16,7 @@ export default function App() {
         <h1>Hello world!!</h1>
         <h2>Howareyou.Good.</h2>
         <Outlet />
-
+        <ScrollRestoration />
         <Scripts />
         <LiveReload />
       </body>
