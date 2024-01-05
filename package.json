@@ -7,6 +7,7 @@
   "scripts": {
     "dev": "remix dev -c \"node server.mjs\"",
     "deboggle": "remix dev -c \"node --inspect server.mjs\"",
+    "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npx remix build",
     "serve": "npx remix-serve build/index.js"
