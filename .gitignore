@@ -32,3 +32,5 @@ tsconfig.tsbuildinfo
 
 /NOTES.md
 /RELEASENOTES.md
+/.cache
+/public/build
