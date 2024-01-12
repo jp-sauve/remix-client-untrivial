@@ -1,16 +1,20 @@
-import { Form } from "@remix-run/react";
+import { Form, useLoaderData } from "@remix-run/react";
 import type { FunctionComponent } from "react";
+import { json, type LoaderFunctionArgs } from "@remix-run/node";
+import { getGame, type GameRecord } from "../data";
+import invariant from "tiny-invariant";
 
-import type { GameRecord } from "../data";
-
+export const loader = async ({ params }: LoaderFunctionArgs) => {
+  invariant(params.gameId, "Missing game ID parameter")
+  const game = await getGame(params.gameId);
+  if (!game) {
+    throw new Response("Not Found", { status: 404 });
+  }
+  return json({ game });
+}
 export default function Game() {
-  const game = {
-    name: "testname",
-    variant: "variantname",
-    type: "sometype",
-    description: "something",
-    favorite: true
-  };
+
+  const {game} = useLoaderData<typeof loader>();
 
   return (
     <div id="contact">
