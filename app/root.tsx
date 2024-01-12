@@ -8,13 +8,17 @@ export const links: LinksFunction = () => [
   { rel: "stylesheet", href: appStylesHref}
 ]
 
-import { getGames } from "./data";
+import { getGames, createEmptyGame } from "./data";
 
 export const loader = async () => {
   const games = await getGames();
   return json({ games });
 };
 
+export const action = async () => {
+  const game = await createEmptyGame();
+  return json({ game });
+}
 export default function App() {
   const { games } = useLoaderData<typeof loader>();
   return (
