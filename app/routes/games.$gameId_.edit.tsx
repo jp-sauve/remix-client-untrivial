@@ -39,7 +39,7 @@ export default function EditGame() {
       <label>
         <span>Twitter</span>
         <input
-          defaultValue={contact.twitter}
+          defaultValue={Game.id}
           name="twitter"
           placeholder="@jack"
           type="text"
