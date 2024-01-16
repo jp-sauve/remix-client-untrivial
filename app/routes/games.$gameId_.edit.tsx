@@ -29,25 +29,46 @@ export default function EditGame() {
     <Form id="game-form" method="post">
       <p>
         <span>Game {game.id}</span>
-        <input defaultValue={game.id} aria-label="id" name="id" type="text" disabled/>
+        <input
+          defaultValue={game.id}
+          aria-label="id"
+          name="id"
+          type="text"
+          disabled
+        />
         <input
           defaultValue={game.name}
           aria-label="Game Name"
-          name="gamename"
+          name="name"
           type="text"
           placeholder="The Name of the Game"
         />
         <input
           aria-label="Game Variant"
           defaultValue={game.variant}
-          name="gamevariant"
+          name="variant"
           placeholder="The Variant"
+          type="text"
+        />
+        <input
+          aria-label="Game Type"
+          defaultValue={game.type}
+          name="type"
+          placeholder="The Type of game"
           type="text"
         />
       </p>
       <label>
         <span>Description</span>
-        <textarea defaultValue={game.id} name="gamedescription" rows={6} />
+        <textarea defaultValue={game.description} name="description" rows={6} />
+      </label>
+      <label>
+        <input
+          type="checkbox"
+          id="favorite"
+          name="favorite"
+          checked={game.favorite}
+        />
       </label>
       <p>
         <button type="submit">Save</button>

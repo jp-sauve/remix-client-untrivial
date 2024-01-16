@@ -1,6 +1,6 @@
 import { Form, Links, Link, LiveReload, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData } from "@remix-run/react";
-import type { LinksFunction } from "@remix-run/node";
-import { json } from "@remix-run/node";
+import type { ActionFunctionArgs, LinksFunction } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
 import { GameRecord } from "./data";
 import appStylesHref from "./app.css";
 
@@ -15,10 +15,11 @@ export const loader = async () => {
   return json({ games });
 };
 
-export const action = async () => {
+export const action = async ({}: ActionFunctionArgs) => {
   const game = await createEmptyGame();
-  return json({ game });
+  return redirect(`/games/${game.id}/edit`);
 }
+
 export default function App() {
   const { games } = useLoaderData<typeof loader>();
   return (

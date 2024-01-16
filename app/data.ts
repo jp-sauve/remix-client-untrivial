@@ -101,6 +101,7 @@ export async function deleteGame(id: string) {
     variant: "Rainbow Rules",
     type: "Grid",
     description: "Black and white tokens move on a black and white staggered grid",
+    favorite: true
   },
   {
     name:
@@ -108,6 +109,7 @@ export async function deleteGame(id: string) {
     variant: "Park Rules",
     type: "Strategy",
     description: "The most popular strategy game in the world.",
+    favorite: true
   },
   {
     name:
