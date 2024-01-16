@@ -12,6 +12,7 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
   await updateGame(params.gameId, updates);
   return redirect(`/games/${params.gameId}`);
 }
+
 export const loader = async ({ params }: LoaderFunctionArgs) => {
   invariant(params.gameId, "Missing gameId param");
   const game = await getGame(params.gameId);
@@ -28,6 +29,7 @@ export default function EditGame() {
     <Form id="game-form" method="post">
       <p>
         <span>Game {game.id}</span>
+        <input defaultValue={game.id} aria-label="id" name="id" type="text" disabled/>
         <input
           defaultValue={game.name}
           aria-label="Game Name"
