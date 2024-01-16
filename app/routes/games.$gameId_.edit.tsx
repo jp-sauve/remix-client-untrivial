@@ -1,63 +1,51 @@
-import type { LoaderFunctionArgs } from "@remix-run/node";
-import { json } from "@remix-run/node";
+import type { LoaderFunctionArgs, ActionFunctionArgs } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
 import { Form, useLoaderData } from "@remix-run/react";
 import invariant from "tiny-invariant";
 
-import { getGame } from "../data";
+import { getGame, updateGame } from "../data";
 
+export const action = async ({ params, request }: ActionFunctionArgs) => {
+  invariant(params.gameId, "Missing gameId parameter");
+  const formData = await request.formData();
+  const updates = Object.fromEntries(formData);
+  await updateGame(params.gameId, updates);
+  return redirect(`/games/${params.gameId}`);
+}
 export const loader = async ({ params }: LoaderFunctionArgs) => {
-  invariant(params.contactId, "Missing contactId param");
-  const contact = await getGame(params.contactId);
-  if (!contact) {
+  invariant(params.gameId, "Missing gameId param");
+  const game = await getGame(params.gameId);
+  if (!game) {
     throw new Response("Not Found", { status: 404 });
   }
-  return json({ contact });
+  return json({ game });
 };
 
 export default function EditGame() {
-  const { contact } = useLoaderData<typeof loader>();
+  const { game } = useLoaderData<typeof loader>();
 
   return (
     <Form id="game-form" method="post">
       <p>
-        <span>Name</span>
+        <span>Game {game.id}</span>
         <input
-          defaultValue={contact.first}
-          aria-label="First name"
-          name="first"
+          defaultValue={game.name}
+          aria-label="Game Name"
+          name="gamename"
           type="text"
-          placeholder="First"
+          placeholder="The Name of the Game"
         />
         <input
-          aria-label="Last name"
-          defaultValue={contact.last}
-          name="last"
-          placeholder="Last"
+          aria-label="Game Variant"
+          defaultValue={game.variant}
+          name="gamevariant"
+          placeholder="The Variant"
           type="text"
         />
       </p>
       <label>
-        <span>Twitter</span>
-        <input
-          defaultValue={Game.id}
-          name="twitter"
-          placeholder="@jack"
-          type="text"
-        />
-      </label>
-      <label>
-        <span>Avatar URL</span>
-        <input
-          aria-label="Avatar URL"
-          defaultValue={contact.avatar}
-          name="avatar"
-          placeholder="https://example.com/avatar.jpg"
-          type="text"
-        />
-      </label>
-      <label>
-        <span>Notes</span>
-        <textarea defaultValue={contact.notes} name="notes" rows={6} />
+        <span>Description</span>
+        <textarea defaultValue={game.id} name="gamedescription" rows={6} />
       </label>
       <p>
         <button type="submit">Save</button>
