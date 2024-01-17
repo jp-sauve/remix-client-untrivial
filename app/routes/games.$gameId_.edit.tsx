@@ -28,14 +28,14 @@ export default function EditGame() {
   return (
     <Form id="game-form" method="post">
       <p>
-        <span>Game # </span>
+        <span>Game #</span>
         <input
           defaultValue={game.id}
           aria-label="id"
           name="id"
           type="text"
           disabled
-        />
+          />
           <input
             id="name"
           defaultValue={game.name}
@@ -43,7 +43,8 @@ export default function EditGame() {
           name="name"
           type="text"
           placeholder="The Name of the Game"
-        />
+        /></p>
+      <label><span>Variant</span>
         <input
           aria-label="Game Variant"
           defaultValue={game.variant}
@@ -51,7 +52,7 @@ export default function EditGame() {
           placeholder="The Variant"
           type="text"
         />
-      </p>
+      </label>
         <label><span>Type</span>
         <input
           aria-label="Game Type"
