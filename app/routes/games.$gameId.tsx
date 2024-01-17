@@ -1,6 +1,6 @@
 import { Form, useLoaderData } from "@remix-run/react";
 import type { FunctionComponent } from "react";
-import { json, type LoaderFunctionArgs } from "@remix-run/node";
+import { json, type LoaderFunctionArgs, type ActionFunctionArgs } from "@remix-run/node";
 import { getGame, type GameRecord } from "../data";
 import invariant from "tiny-invariant";
 
@@ -17,7 +17,7 @@ export default function Game() {
   const {game} = useLoaderData<typeof loader>();
 
   return (
-    <div id="contact">
+    <div id="game">
       <div>
         <h1>
           {game.name || game.variant ? (

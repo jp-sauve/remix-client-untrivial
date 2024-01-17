@@ -28,7 +28,7 @@ export default function EditGame() {
   return (
     <Form id="game-form" method="post">
       <p>
-        <span>Game {game.id}</span>
+        <span>Game # </span>
         <input
           defaultValue={game.id}
           aria-label="id"
@@ -36,7 +36,8 @@ export default function EditGame() {
           type="text"
           disabled
         />
-        <input
+          <input
+            id="name"
           defaultValue={game.name}
           aria-label="Game Name"
           name="name"
@@ -50,14 +51,16 @@ export default function EditGame() {
           placeholder="The Variant"
           type="text"
         />
+      </p>
+        <label><span>Type</span>
         <input
           aria-label="Game Type"
           defaultValue={game.type}
           name="type"
           placeholder="The Type of game"
           type="text"
-        />
-      </p>
+        /></label>
+
       <label>
         <span>Description</span>
         <textarea defaultValue={game.description} name="description" rows={6} />
