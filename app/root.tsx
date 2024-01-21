@@ -9,24 +9,34 @@ import {
   type ShouldRevalidateFunctionArgs,
   Link
 } from "@remix-run/react";
-import { redirect, type DataFunctionArgs, LinksFunction } from "@remix-run/node";
+import { redirect, LinksFunction, LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 
 import { LoginIcon, LogoutIcon } from "./icons/icons";
-import { getAuthFromRequest } from "./auth/auth";
+import { authCookie, getAuthFromRequest } from "./auth/auth";
 
 import appStylesHref from "./styles.css";
+
+export const meta: MetaFunction<typeof loader> = ({ data }) => {
+  if (data && data.userId) {
+    return [{ title: `Untrivial #${data.userId}` }];
+  }
+  return [{ title: `Untrivial` }];
+};
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: appStylesHref }
 ];
 
-export async function loader({ request }: DataFunctionArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
   let auth = await getAuthFromRequest(request);
-  if (auth && new URL(request.url).pathname === "/") {
-    // throw redirect("/");
+  let cookieString = request.headers.get("Cookie");
+  let userId = await authCookie.parse(cookieString)
+  return { userId };
+  // if (auth && new URL(request.url).pathname === "/") {
+  //   // throw redirect("/");
     
-  }
-  return auth;
+  // }
+
 }
 
 export function shouldRevalidate({ formAction }: ShouldRevalidateFunctionArgs) {
@@ -34,7 +44,7 @@ export function shouldRevalidate({ formAction }: ShouldRevalidateFunctionArgs) {
 }
 
 export default function App() {
-  let userId = useLoaderData<typeof loader>();
+  let { userId } = useLoaderData<typeof loader>();
 
   return (
     <html lang="en">
