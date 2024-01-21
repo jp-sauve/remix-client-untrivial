@@ -7,14 +7,28 @@ export const meta = () => {
 
 export async function action({ request }: ActionFunctionArgs) {
   let formData = await request.formData();
-  console.log(formData.get("email"));
-  console.log(formData.get("password"));
-  return null;
+  let email = String(formData.get("email"));
+  let password = String(formData.get("password"));
+  let errors: { email?: String; password?: String; } = {}
+  if (!email) {
+    errors.email = "Email is required";
+  } else if (!email.includes("@")) {
+    errors.email = "Please enter a valid email address"
+  }
+  if (!password) {
+    errors.password = "Password is required"
+  } else if (password.length < 8) {
+    errors.password = " Password must be at least 8 characters"
+  }
+  
+  return {
+    errors: Object.keys(errors).length ? errors : null,
+  };
 }
 
 export default function Signup() {
-  let emailError = "You must supply an email address.";
-  let emailError = "You must supply a password.";
+  let emailError = null;
+  let passwordError = null;
   return (
     <div className="flex min-h-full flex-1 flex-col mt-20 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
@@ -34,7 +48,10 @@ export default function Signup() {
                 htmlFor="email"
                 className="block text-sm font-medium leading-6 text-gray-900"
               >
-                Email Address
+                Email Address{" "}
+                {emailError && (
+                  <span className="text-brand-red">{emailError}</span>
+                )}
               </label>
               <input
                 autoFocus
@@ -51,7 +68,10 @@ export default function Signup() {
                 htmlFor="password"
                 className="block text-sm font-medium leading-6 text-gray-900"
               >
-                Password
+                Password{" "}
+                {passwordError && (
+                  <span className="text-brand-red">{passwordError}</span>
+                )}
               </label>
               <input
                 autoFocus
@@ -64,7 +84,12 @@ export default function Signup() {
                 className="form-input block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brand-blue sm:text-sm sm:leading-6"
               />
             </div>
-            <button type="submit" className="flex w-full bg-brand-blue px-1 py-1">Sign In</button>
+            <button
+              type="submit"
+              className="flex w-full bg-brand-blue px-1 py-1"
+            >
+              Sign In
+            </button>
           </Form>
         </div>
       </div>
