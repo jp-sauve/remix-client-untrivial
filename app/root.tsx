@@ -23,7 +23,8 @@ export const links: LinksFunction = () => [
 export async function loader({ request }: DataFunctionArgs) {
   let auth = await getAuthFromRequest(request);
   if (auth && new URL(request.url).pathname === "/") {
-    throw redirect("/home");
+    // throw redirect("/");
+    
   }
   return auth;
 }

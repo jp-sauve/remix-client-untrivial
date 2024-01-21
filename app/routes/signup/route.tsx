@@ -1,6 +1,6 @@
 import { ActionFunctionArgs, redirect } from "@remix-run/node";
 import { Form, Link, useActionData } from "@remix-run/react";
-import { createAccount } from "../../auth/auth.ts";
+import { authCookie, createAccount } from "../../auth/auth";
 
 export const meta = () => {
   return [{ title: "Untrivial Signup" }];
@@ -34,7 +34,11 @@ export async function action({ request }: ActionFunctionArgs) {
   }
   let user = await createAccount(email, password);
   console.warn("NEW USER", user)
-  return redirect("/")
+  return redirect("/", {
+    headers: {
+      "Set-Cookie": await authCookie.serialize(user.id)
+    }
+  })
 }
 
 export default function Signup() {

@@ -7,7 +7,7 @@ if (secret === 'default') {
   secret = 'unsecret'
 }
 
-let cookie = createCookie("auth", {
+export let authCookie = createCookie("auth", {
   secrets: [secret],
   // 30 days
   maxAge: 30 * 24 * 60 * 60,
@@ -24,6 +24,6 @@ export async function createAccount(email: string, password: string) {
 export async function getAuthFromRequest(
   request: Request,
 ): Promise<string | null> {
-  let userId = await cookie.parse(request.headers.get("Cookie"));
+  let userId = await authCookie.parse(request.headers.get("Cookie"));
   return userId ?? null;
 }
