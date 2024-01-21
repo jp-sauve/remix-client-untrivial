@@ -1,85 +1,125 @@
-import { Form, Links, Link, LiveReload, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData } from "@remix-run/react";
-import type { ActionFunctionArgs, LinksFunction } from "@remix-run/node";
-import { json, redirect } from "@remix-run/node";
-import { GameRecord } from "./data";
-import appStylesHref from "./app.css";
+import {
+  Links,
+  LiveReload,
+  Meta,
+  Outlet,
+  Scripts,
+  ScrollRestoration,
+  useLoaderData,
+  type ShouldRevalidateFunctionArgs,
+  Link
+} from "@remix-run/react";
+import { redirect, type DataFunctionArgs, LinksFunction } from "@remix-run/node";
+
+import { LoginIcon, LogoutIcon } from "./icons/icons";
+import { getAuthFromRequest } from "./auth/auth";
+
+import appStylesHref from "./styles.css";
 
 export const links: LinksFunction = () => [
-  { rel: "stylesheet", href: appStylesHref}
-]
+  { rel: "stylesheet", href: appStylesHref }
+];
 
-import { getGames, createEmptyGame } from "./data";
+export async function loader({ request }: DataFunctionArgs) {
+  let auth = await getAuthFromRequest(request);
+  if (auth && new URL(request.url).pathname === "/") {
+    throw redirect("/home");
+  }
+  return auth;
+}
 
-export const loader = async () => {
-  const games = await getGames();
-  return json({ games });
-};
-
-export const action = async ({}: ActionFunctionArgs) => {
-  const game = await createEmptyGame();
-  return redirect(`/games/${game.id}/edit`);
+export function shouldRevalidate({ formAction }: ShouldRevalidateFunctionArgs) {
+  return formAction && ["/login", "/signup", "logout"].includes(formAction);
 }
 
 export default function App() {
-  const { games } = useLoaderData<typeof loader>();
+  let userId = useLoaderData<typeof loader>();
+
   return (
     <html lang="en">
       <head>
+        <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="data:image/x-icon;base64,AA" />
+
         <Meta />
         <Links />
       </head>
-      <body>
-        <div id="sidebar">
-          <h1>Untrivial 1.0</h1>
-          <div>
-            <Form id="search-form" role="search">
-              <input
-                aria-label="Search games"
-                id="q"
-                name="q"
-                placeholder="Search"
-                type="search"
+      <body className="h-screen bg-slate-100 text-slate-900">
+        <div className="h-full flex flex-col min-h-0">
+          <div className="bg-slate-900 border-b border-slate-800 flex items-center justify-between py-4 px-8 box-border">
+            <Link to="/home" className="block leading-3 w-1/3">
+              <div className="font-black text-2xl text-white">Trellix</div>
+              <div className="text-slate-500">a Remix Demo</div>
+            </Link>
+            <div className="flex items-center gap-6">
+              <IconLink
+                href="https://www.youtube.com/watch?v=RTHzZVbTl6c&list=PLXoynULbYuED9b2k5LS44v9TQjfXifwNu&pp=gAQBiAQB"
+                icon="/yt_icon_mono_dark.png"
+                label="Videos"
               />
-              <div aria-hidden hidden={true} id="search-spinner" />
-            </Form>
-            <Form method="post">
-              <button type="submit">New</button>
-            </Form>
+              <IconLink
+                href="https://github.com/remix-run/example-trellix"
+                label="Source"
+                icon="/github-mark-white.png"
+              />
+              <IconLink
+                href="https://remix.run/docs/en/main"
+                icon="/r.png"
+                label="Docs"
+              />
+            </div>
+            <div className="w-1/3 flex justify-end">
+              {userId ? (
+                <form method="post" action="/logout">
+                  <button className="block text-center">
+                    <LogoutIcon />
+                    <br />
+                    <span className="text-slate-500 text-xs uppercase font-bold">
+                      Log out
+                    </span>
+                  </button>
+                </form>
+              ) : (
+                <Link to="/login" className="block text-center">
+                  <LoginIcon />
+                  <br />
+                  <span className="text-slate-500 text-xs uppercase font-bold">
+                    Log in
+                  </span>
+                </Link>
+              )}
+            </div>
           </div>
-          <nav>
-            {games.length ? (
-              <ul>
-                {games.map((game: GameRecord) => (
-                  <li key={game.id}>
-                    <Link to={`games/${game.id}`}>
-                      {game.name || game.variant ? (
-                        <>
-                          {game.name} {game.variant}
-                        </>
-                      ) : (
-                        <i>No Name</i>
-                      )}{" "}
-                      {game.id ? <span>★</span> : null}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p>
-                <i>No contacts</i>
-              </p>
-            )}
-          </nav>
+
+          <div className="flex-grow min-h-0 h-full">
+            <Outlet />
+          </div>
         </div>
-        <div id="detail">
-          <Outlet />
-        </div>
+
         <ScrollRestoration />
-        <Scripts />
         <LiveReload />
+        <Scripts />
       </body>
     </html>
+  );
+}
+
+function IconLink({
+  icon,
+  href,
+  label
+}: {
+  icon: string;
+  href: string;
+  label: string;
+}) {
+  return (
+    <a
+      href={href}
+      className="text-slate-500 text-xs uppercase font-bold text-center"
+    >
+      <img src={icon} alt="icon" aria-hidden className="inline-block h-8" />
+      <span className="block mt-2">{label}</span>
+    </a>
   );
 }

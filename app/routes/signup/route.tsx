@@ -1,5 +1,6 @@
-import { ActionFunctionArgs } from "@remix-run/node";
-import { Form, Link } from "@remix-run/react";
+import { ActionFunctionArgs, redirect } from "@remix-run/node";
+import { Form, Link, useActionData } from "@remix-run/react";
+import { createAccount } from "../../auth/auth.ts";
 
 export const meta = () => {
   return [{ title: "Untrivial Signup" }];
@@ -9,26 +10,38 @@ export async function action({ request }: ActionFunctionArgs) {
   let formData = await request.formData();
   let email = String(formData.get("email"));
   let password = String(formData.get("password"));
+
+  console.warn("Incoming: ", email, password)
+
   let errors: { email?: String; password?: String; } = {}
   if (!email) {
     errors.email = "Email is required";
+    console.log("=-=-=-=-= Email is required")
   } else if (!email.includes("@")) {
-    errors.email = "Please enter a valid email address"
+    errors.email = "Please enter a valid email address";
+    console.log("-=-=-=- Please enter a valid email address");
   }
   if (!password) {
     errors.password = "Password is required"
+    console.log("Password is required");
   } else if (password.length < 8) {
-    errors.password = " Password must be at least 8 characters"
+    errors.password = "Password must be at least 8 characters"
+    console.log("Password must be at least 8 characters");
   }
-  
-  return {
-    errors: Object.keys(errors).length ? errors : null,
-  };
+  if (Object.keys(errors).length > 0) {
+    console.error("Returning errors: ", errors)
+    return { errors };
+  }
+  let user = await createAccount(email, password);
+  console.warn("NEW USER", user)
+  return redirect("/")
 }
 
 export default function Signup() {
-  let emailError = null;
-  let passwordError = null;
+  let actionData = useActionData<typeof action>();
+  let emailError = actionData?.errors?.email;
+  let passwordError = actionData?.errors?.password;
+
   return (
     <div className="flex min-h-full flex-1 flex-col mt-20 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
@@ -55,7 +68,7 @@ export default function Signup() {
               </label>
               <input
                 autoFocus
-                type="email"
+                type="text"
                 name="email"
                 id="email"
                 autoComplete="email"
@@ -78,9 +91,9 @@ export default function Signup() {
                 type="password"
                 name="password"
                 id="password"
+                required
                 autoComplete="current-password"
                 aria-describedby="password-error"
-                required
                 className="form-input block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brand-blue sm:text-sm sm:leading-6"
               />
             </div>

@@ -3,7 +3,7 @@ import { json, redirect } from "@remix-run/node";
 import { Form, useLoaderData } from "@remix-run/react";
 import invariant from "tiny-invariant";
 
-import { getGame, updateGame } from "../data";
+import { getGame, updateGame } from "../games_/data";
 
 export const action = async ({ params, request }: ActionFunctionArgs) => {
   invariant(params.gameId, "Missing gameId parameter");
@@ -11,7 +11,7 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
   const updates = Object.fromEntries(formData);
   await updateGame(params.gameId, updates);
   return redirect(`/games/${params.gameId}`);
-}
+};
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
   invariant(params.gameId, "Missing gameId param");
@@ -35,16 +35,18 @@ export default function EditGame() {
           name="id"
           type="text"
           disabled
-          />
-          <input
-            id="name"
+        />
+        <input
+          id="name"
           defaultValue={game.name}
           aria-label="Game Name"
           name="name"
           type="text"
           placeholder="The Name of the Game"
-        /></p>
-      <label><span>Variant</span>
+        />
+      </p>
+      <label>
+        <span>Variant</span>
         <input
           aria-label="Game Variant"
           defaultValue={game.variant}
@@ -53,14 +55,16 @@ export default function EditGame() {
           type="text"
         />
       </label>
-        <label><span>Type</span>
+      <label>
+        <span>Type</span>
         <input
           aria-label="Game Type"
           defaultValue={game.type}
           name="type"
           placeholder="The Type of game"
           type="text"
-        /></label>
+        />
+      </label>
 
       <label>
         <span>Description</span>

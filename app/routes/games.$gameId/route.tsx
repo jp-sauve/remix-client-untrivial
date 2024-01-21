@@ -1,20 +1,23 @@
 import { Form, useLoaderData } from "@remix-run/react";
 import type { FunctionComponent } from "react";
-import { json, type LoaderFunctionArgs, type ActionFunctionArgs } from "@remix-run/node";
-import { getGame, type GameRecord } from "../data";
+import {
+  json,
+  type LoaderFunctionArgs,
+  type ActionFunctionArgs
+} from "@remix-run/node";
+import { getGame, type GameRecord } from "../games_/data";
 import invariant from "tiny-invariant";
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
-  invariant(params.gameId, "Missing game ID parameter")
+  invariant(params.gameId, "Missing game ID parameter");
   const game = await getGame(params.gameId);
   if (!game) {
     throw new Response("Not Found", { status: 404 });
   }
   return json({ game });
-}
+};
 export default function Game() {
-
-  const {game} = useLoaderData<typeof loader>();
+  const { game } = useLoaderData<typeof loader>();
 
   return (
     <div id="game">
@@ -30,11 +33,7 @@ export default function Game() {
           <Favorite game={game} />
         </h1>
 
-        {game.description ? (
-          <p>
-            {game.description}
-          </p>
-        ) : null}
+        {game.description ? <p>{game.description}</p> : null}
 
         {game.type ? <p>{game.type}</p> : null}
 
