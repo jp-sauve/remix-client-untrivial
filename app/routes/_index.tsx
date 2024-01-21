@@ -7,26 +7,15 @@ import { Link } from "@remix-run/react";
 
 export default function Index() {
   return (
-    <div className="h-full flex flex-col items-center pt-20 bg-slate-900">
-      <img src="/remix-logo-new@dark.png" alt="remix-logo" width="402" height="149" />
-      <div className="space-y-4 max-w-md text-lg text-slate-300">
+    <div className="h-full flex flex-col items-center pt-1 bg-slate-900">
+      <img src="/logo-tr.png" alt="untrivial-logo" width="402" height="149" />
+      <div className="space-y-2 max-w-md text-lg text-slate-300">
         <p>
-          This is a demo app to show off the features of Remix and teach them
-          through some videos we've published on{" "}
-          <a
-            href="https://www.youtube.com/watch?v=RTHzZVbTl6c&list=PLXoynULbYuED9b2k5LS44v9TQjfXifwNu&pp=gAQBiAQB"
-            className="underline"
-          >
-            YouTube
-          </a>
-          .
+          Welcome to Untrivial, the best app for running great trivia events.{" "}
         </p>
         <p>
-          It's a recreation of the popular drag and drop interface in{" "}
-          <a href="https://trello.com" className="underline">
-            Trello
-          </a>{" "}
-          and other similar apps.
+          It's free for now, but will have a small fee for larger events.
+          Want a new feature? Send us an email and we'll add it to the list!{" "}
         </p>
         <p>If you want to play around, click sign up!</p>
       </div>
