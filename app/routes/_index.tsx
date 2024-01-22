@@ -13,6 +13,7 @@ export default function Index() {
         <p>
           Welcome to Untrivial, the best app for running great trivia events.{" "}
         </p>
+        <p>This app is in beta mode, and will open up soon! Leave feedback please!</p>
         <p>
           It's free for now, but will have a small fee for larger events.
           Want a new feature? Send us an email and we'll add it to the list!{" "}
