@@ -11,7 +11,7 @@ export default function Index() {
       <img src="/logo-tr.png" alt="untrivial-logo" width="402" height="149" />
       <div className="space-y-2 max-w-md text-lg text-slate-300">
         <p>
-          Welcome to Untrivial, the best app for running great trivia events.{" "}
+          Welcome to Untrivial (beta), the best and only app for running great trivia events.{" "}
         </p>
         <p>This app is in beta mode, and will open up soon! Leave feedback please!</p>
         <p>
@@ -19,6 +19,9 @@ export default function Index() {
           Want a new feature? Send us an email and we'll add it to the list!{" "}
         </p>
         <p>If you want to play around, click sign up!</p>
+        <p>
+          Future features include custom question sets, embedded videos, and uploadable music
+        </p>
       </div>
       <div className="flex w-full justify-evenly max-w-md mt-8 rounded-3xl p-10 bg-slate-800">
         <Link
